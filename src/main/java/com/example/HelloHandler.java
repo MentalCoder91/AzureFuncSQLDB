@@ -81,9 +81,9 @@ public class HelloHandler {
         List<Product> productList = repository.findAll();
 
         if (CollectionUtils.isEmpty(productList)) {
-            response = request.createResponseBuilder(HttpStatus.OK).body("The product lst is empty").build();
+            response = request.createResponseBuilder(HttpStatus.OK).body("The product list is empty").build();
         } else {
-            response = request.createResponseBuilder(HttpStatus.OK).body(repository.findAll()).build();
+            response = request.createResponseBuilder(HttpStatus.OK).body(productList).build();
         }
 
         return response;
