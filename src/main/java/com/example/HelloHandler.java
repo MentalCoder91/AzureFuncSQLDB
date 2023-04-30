@@ -3,7 +3,6 @@ package com.example;
 import com.example.model.Greeting;
 import com.example.model.Product;
 import com.example.model.User;
-import com.example.repository.AzureRepository;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Mono;
 
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -23,8 +24,6 @@ public class HelloHandler {
     @Autowired
     Function<Mono<User>, Mono<Greeting>> hello;
 
-    @Autowired
-    AzureRepository repository;
 
     @FunctionName("hello")  // This acts as an endpoint /api/hello
     public HttpResponseMessage execute(
@@ -66,10 +65,10 @@ public class HelloHandler {
         }
     }
 
-    @FunctionName("getProducts")
-    public HttpResponseMessage exec(
+    @FunctionName("getAllProducts")
+    public HttpResponseMessage execJDBC(
             @HttpTrigger(
-                    name = "getProducts",
+                    name = "getAllProducts",
                     methods = {HttpMethod.GET, HttpMethod.POST},
                     authLevel = AuthorizationLevel.ANONYMOUS)
                     HttpRequestMessage<Optional<String>> request,
@@ -77,18 +76,84 @@ public class HelloHandler {
 
         context.getLogger().info("Get products function triggered");
 
-        HttpResponseMessage response=null;
-        List<Product> productList = repository.findAll();
+        HttpResponseMessage response = null;
+        String connectionUrl = "jdbc:sqlserver://sql-server-1991.database.windows.net:1433;" +
+                "database=sql-database-1991;user=sqladmin@sql-server-1991;password=Anish@1991;" +
+                "encrypt=true;trustServerCertificate=false;" +
+                "hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
-        if (CollectionUtils.isEmpty(productList)) {
-            response = request.createResponseBuilder(HttpStatus.OK).body("The product list is empty").build();
-        } else {
-            response = request.createResponseBuilder(HttpStatus.OK).body(productList).build();
+        Connection connection = null;
+
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection = DriverManager.getConnection(connectionUrl);
+
+            // Execute SQL query to retrieve data
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Products");
+            ResultSet resultSet = statement.executeQuery();
+
+            // Create list to store product data
+            List<Product> productList = new ArrayList<>();
+
+            // Iterate over result set and create Product objects
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getLong("product_id"));
+                product.setProductName(resultSet.getString("product_name"));
+                product.setQuantity(resultSet.getLong("quantity"));
+                productList.add(product);
+            }
+
+            if (CollectionUtils.isEmpty(productList)) {
+                response = request.createResponseBuilder(HttpStatus.OK).body("The product list is empty").build();
+            } else {
+                response = request.createResponseBuilder(HttpStatus.OK).body(productList).build();
+            }
+
+        } catch (Exception e) {
+            context.getLogger().severe("Exception caught: " + e.getMessage());
+            response = request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred " +
+                    "while retrieving products").build();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                context.getLogger().severe("Exception caught while closing connection: " + e.getMessage());
+            }
         }
 
         return response;
-
     }
 
 
+
+//    @FunctionName("getProducts")
+//    public HttpResponseMessage exec(
+//            @HttpTrigger(
+//                    name = "getProducts",
+//                    methods = {HttpMethod.GET, HttpMethod.POST},
+//                    authLevel = AuthorizationLevel.ANONYMOUS)
+//                    HttpRequestMessage<Optional<String>> request,
+//            final ExecutionContext context) {
+//
+//        context.getLogger().info("Get products function triggered");
+//
+//        HttpResponseMessage response=null;
+//        List<Product> productList = repository.findAll();
+//
+//        if (CollectionUtils.isEmpty(productList)) {
+//            response = request.createResponseBuilder(HttpStatus.OK).body("The product list is empty").build();
+//        } else {
+//            response = request.createResponseBuilder(HttpStatus.OK).body(productList).build();
+//        }
+//
+//        return response;
+//
+//    }
+
 }
+
+
+
