@@ -40,7 +40,7 @@ public class HelloHandler {
 
 
 
-    @FunctionName("HttpExample")
+    @FunctionName("httpEx")
     public HttpResponseMessage run(
             @HttpTrigger(
                     name = "req",
