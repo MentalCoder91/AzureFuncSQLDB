@@ -8,6 +8,8 @@ description: "This is a sample application to showcase the use of Spring Cloud F
 urlFragment: hello-spring-function-azure
 ---
 
+There are 4 endpoints the DB functionality does not work some issue but the other 2 endpoints do work.
+
 # Example "Hello, world" Spring Boot application that runs on Azure Functions
 
 This is a sample application to showcase the use of Spring Cloud Function on top of Azure Functions.
