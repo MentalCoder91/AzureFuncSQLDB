@@ -65,67 +65,67 @@ public class HelloHandler {
         }
     }
 
-    @FunctionName("getAllProducts")
-    public HttpResponseMessage execJDBC(
-            @HttpTrigger(
-                    name = "getAllProducts",
-                    methods = {HttpMethod.GET, HttpMethod.POST},
-                    authLevel = AuthorizationLevel.ANONYMOUS)
-                    HttpRequestMessage<Optional<String>> request,
-            final ExecutionContext context) {
-
-        context.getLogger().info("Get products function triggered");
-
-        HttpResponseMessage response = null;
-        String connectionUrl = "jdbc:sqlserver://sql-server-1991.database.windows.net:1433;" +
-                "database=sql-database-1991;user=sqladmin@sql-server-1991;password=Anish@1991;" +
-                "encrypt=true;trustServerCertificate=false;" +
-                "hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
-
-        Connection connection = null;
-
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connection = DriverManager.getConnection(connectionUrl);
-
-            // Execute SQL query to retrieve data
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Products");
-            ResultSet resultSet = statement.executeQuery();
-
-            // Create list to store product data
-            List<Product> productList = new ArrayList<>();
-
-            // Iterate over result set and create Product objects
-            while (resultSet.next()) {
-                Product product = new Product();
-                product.setProductId(resultSet.getLong("product_id"));
-                product.setProductName(resultSet.getString("product_name"));
-                product.setQuantity(resultSet.getLong("quantity"));
-                productList.add(product);
-            }
-
-            if (CollectionUtils.isEmpty(productList)) {
-                response = request.createResponseBuilder(HttpStatus.OK).body("The product list is empty").build();
-            } else {
-                response = request.createResponseBuilder(HttpStatus.OK).body(productList).build();
-            }
-
-        } catch (Exception e) {
-            context.getLogger().severe("Exception caught: " + e.getMessage());
-            response = request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred " +
-                    "while retrieving products").build();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                context.getLogger().severe("Exception caught while closing connection: " + e.getMessage());
-            }
-        }
-
-        return response;
-    }
+//    @FunctionName("getAllProducts")
+//    public HttpResponseMessage execJDBC(
+//            @HttpTrigger(
+//                    name = "getAllProducts",
+//                    methods = {HttpMethod.GET, HttpMethod.POST},
+//                    authLevel = AuthorizationLevel.ANONYMOUS)
+//                    HttpRequestMessage<Optional<String>> request,
+//            final ExecutionContext context) {
+//
+//        context.getLogger().info("Get products function triggered");
+//
+//        HttpResponseMessage response = null;
+//        String connectionUrl = "jdbc:sqlserver://sql-server-1991.database.windows.net:1433;" +
+//                "database=sql-database-1991;user=sqladmin@sql-server-1991;password=Anish@1991;" +
+//                "encrypt=true;trustServerCertificate=false;" +
+//                "hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+//
+//        Connection connection = null;
+//
+//        try {
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//            connection = DriverManager.getConnection(connectionUrl);
+//
+//            // Execute SQL query to retrieve data
+//            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Products");
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            // Create list to store product data
+//            List<Product> productList = new ArrayList<>();
+//
+//            // Iterate over result set and create Product objects
+//            while (resultSet.next()) {
+//                Product product = new Product();
+//                product.setProductId(resultSet.getLong("product_id"));
+//                product.setProductName(resultSet.getString("product_name"));
+//                product.setQuantity(resultSet.getLong("quantity"));
+//                productList.add(product);
+//            }
+//
+//            if (CollectionUtils.isEmpty(productList)) {
+//                response = request.createResponseBuilder(HttpStatus.OK).body("The product list is empty").build();
+//            } else {
+//                response = request.createResponseBuilder(HttpStatus.OK).body(productList).build();
+//            }
+//
+//        } catch (Exception e) {
+//            context.getLogger().severe("Exception caught: " + e.getMessage());
+//            response = request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred " +
+//                    "while retrieving products").build();
+//        } finally {
+//            try {
+//                if (connection != null) {
+//                    connection.close();
+//                }
+//            } catch (SQLException e) {
+//                context.getLogger().severe("Exception caught while closing connection: " + e.getMessage());
+//            }
+//        }
+//
+//        return response;
+//    }
 
 
 
