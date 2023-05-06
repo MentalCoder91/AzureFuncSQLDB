@@ -27,7 +27,7 @@
         <spring.cloud.function.dependencies>4.0.0</spring.cloud.function.dependencies>
 
         <!-- customize those five properties. The functionAppName should be unique across Azure -->
-        <functionResourceGroup>app-grp</functionResourceGroup>
+        <functionResourceGroup>azure-spring-workshop</functionResourceGroup>
         <functionAppServicePlanName>anish-func-app</functionAppServicePlanName>
         <functionAppName>myfunc1991</functionAppName>
         <functionAppRegion>eastus</functionAppRegion>
@@ -64,18 +64,26 @@
             <version>3.9.0</version>
             <scope>test</scope>
         </dependency>
+        
+        
+        
+        
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        	<groupId>com.mysql</groupId>
+        	<artifactId>mysql-connector-j</artifactId>
+        	<scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <scope>runtime</scope>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.projectlombok</groupId>
+        	<artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
