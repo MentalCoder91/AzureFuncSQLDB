@@ -8,7 +8,55 @@ description: "This is a sample application to showcase the use of Spring Cloud F
 urlFragment: hello-spring-function-azure
 ---
 
-There are 4 endpoints the DB functionality does not work some issue but the other 2 endpoints do work.
+There are 4 endpoints the DB functionality 
+
+
+getAllProducts: [GET,POST] http://localhost:7071/api/getAllProducts
+
+getProducts: [GET,POST] http://localhost:7071/api/getProducts
+
+hello: [GET,POST] http://localhost:7071/api/hello
+
+httpEx: [GET,POST] http://localhost:7071/api/httpEx
+
+It is integrated with Azure MySQL Database 
+
+------------------------------------------------------
+Create Azure MySQL Database
+
+
+
+AZ_RESOURCE_GROUP=azure-spring-workshop
+AZ_DATABASE_NAME=spring-db
+AZ_LOCATION=eastus
+AZ_MYSQL_USERNAME=spring
+
+
+az group create --name $AZ_RESOURCE_GROUP --location $AZ_LOCATION 
+
+az mysql server create \
+    --resource-group $AZ_RESOURCE_GROUP \
+    --name $AZ_DATABASE_NAME \
+    --location $AZ_LOCATION \
+    --sku-name B_Gen5_1 \
+    --storage-size 5120 \
+    --admin-user $AZ_MYSQL_USERNAME 
+	
+COPY password from above generated output	
+	
+az mysql server firewall-rule create \
+    --resource-group $AZ_RESOURCE_GROUP \
+    --name allAzureIPs \
+    --server-name $AZ_DATABASE_NAME \
+    --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0 
+
+
+az mysql db create \
+    --resource-group $AZ_RESOURCE_GROUP \
+    --name demo \
+    --server-name $AZ_DATABASE_NAME 
+
+-----------------------------------------------------------------------------------------
 
 # Example "Hello, world" Spring Boot application that runs on Azure Functions
 
