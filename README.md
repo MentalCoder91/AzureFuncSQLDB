@@ -5,7 +5,8 @@ languages:
 products:
 - azure
 description: "This is a sample application to showcase the use of Spring Cloud Function on top of Azure Functions."
-urlFragment: hello-spring-function-azure
+urlFragment: AzureFuncSQLDB
+
 ---
 
 There are 4 endpoints the DB functionality 
@@ -32,8 +33,11 @@ AZ_LOCATION=eastus
 AZ_MYSQL_USERNAME=spring
 
 
+create rg:
 az group create --name $AZ_RESOURCE_GROUP --location $AZ_LOCATION 
 
+
+create MYSQL server:
 az mysql server create \
     --resource-group $AZ_RESOURCE_GROUP \
     --name $AZ_DATABASE_NAME \
@@ -43,19 +47,32 @@ az mysql server create \
     --admin-user $AZ_MYSQL_USERNAME 
 	
 COPY password from above generated output	
-	
+
+create firewall rules:
 az mysql server firewall-rule create \
     --resource-group $AZ_RESOURCE_GROUP \
     --name allAzureIPs \
     --server-name $AZ_DATABASE_NAME \
     --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0 
 
-
+create db:
 az mysql db create \
     --resource-group $AZ_RESOURCE_GROUP \
     --name demo \
     --server-name $AZ_DATABASE_NAME 
 
+-----------------------------------------------------------------------------------------
+
+application.properties:
+
+
+spring.datasource.url=jdbc:mysql://spring-db.mysql.database.azure.com:3306/demo?serverTimezone=UTC
+spring.datasource.username=spring@spring-db
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.password={password}
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.hibernate.ddl-auto=update
 -----------------------------------------------------------------------------------------
 
 # Example "Hello, world" Spring Boot application that runs on Azure Functions
