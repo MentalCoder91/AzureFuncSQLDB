@@ -73,6 +73,7 @@ spring.datasource.password={password}
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 spring.jpa.hibernate.ddl-auto=update
+
 -----------------------------------------------------------------------------------------
 
 # Example "Hello, world" Spring Boot application that runs on Azure Functions
