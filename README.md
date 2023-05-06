@@ -74,7 +74,7 @@ This project uses the Maven Wrapper, so all you need is Java installed.
 
 ### Installation
 
-- Clone the project: `git clone https://github.com/Azure-Samples/hello-spring-function-azure.git`
+- Clone the project: `git clone https://github.com/MentalCoder91/AzureFuncSQLDB.git`
 - Configure the project to use your own resource group and your own application name (it should be unique across Azure)
   - Open the `pom.xml` file
   - Customize the `functionResourceGroup` and `functionAppName` properties
