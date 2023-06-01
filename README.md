@@ -22,6 +22,7 @@ httpEx: [GET,POST] http://localhost:7071/api/httpEx
 
 It is integrated with Azure MySQL Database 
 
+
 ------------------------------------------------------
 Create Azure MySQL Database
 
@@ -126,4 +127,9 @@ Or a GET request:
 curl https://<YOUR_SPRING_FUNCTION_NAME>.azurewebsites.net/api/hello?name=Azure
 ```
 
-Replace the `<YOUR_SPRING_FUNCTION_NAME>` part by the name of your Spring Function.
+
+
+[INFO]   getAllProducts : https://myfunc1991.azurewebsites.net/api/getallproducts
+[INFO]   getProducts : https://myfunc1991.azurewebsites.net/api/getproducts
+[INFO]   hello : https://myfunc1991.azurewebsites.net/api/hello
+[INFO]   httpEx : https://myfunc1991.azurewebsites.net/api/httpex
