@@ -119,7 +119,7 @@ public class HelloHandler {
             Class.forName("com.mysql.cj.jdbc.Driver");
             
             
-            connection = DriverManager.getConnection(connectionUrl, "spring@spring-db", "zwfU_4lbjaQLIAjBIHNX3Q");
+            connection = DriverManager.getConnection(connectionUrl, "spring@spring-db", "AABBCC");
 
             // Execute SQL query to retrieve data
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Products");
